@@ -1,14 +1,21 @@
 package com.damarazka.recyclerv
 
 import android.view.LayoutInflater
+import android.view.ScrollCaptureCallback
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 class ListHeroAdapter(private val listHero: ArrayList<Hero>) : RecyclerView.Adapter<ListHeroAdapter.ListViewHolder>() {
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view : View = LayoutInflater.from(parent.context).inflate(R.layout.item_row_hero, parent, false)
@@ -20,6 +27,11 @@ class ListHeroAdapter(private val listHero: ArrayList<Hero>) : RecyclerView.Adap
         holder.imgPhoto.setImageResource(photo)
         holder.tvName.text = name
         holder.tvDescription.text = description
+        holder.itemView.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "U Choose " + listHero[holder.adapterPosition].name, Toast.LENGTH_SHORT).show()
+        }
+
+        holder.itemView.setOnClickListener{onItemClickCallback.onItemClicked(listHero[holder.adapterPosition])}
     }
     override fun getItemCount(): Int = listHero.size
 
@@ -28,5 +40,7 @@ class ListHeroAdapter(private val listHero: ArrayList<Hero>) : RecyclerView.Adap
         val tvName: TextView = itemView.findViewById(R.id.tv_item_name)
         val tvDescription: TextView = itemView.findViewById(R.id.tv_item_description)
     }
-
+    interface OnItemClickCallback {
+        fun onItemClicked(data: Hero)
+    }
 }

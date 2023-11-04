@@ -3,6 +3,7 @@ package com.damarazka.recyclerv
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
@@ -37,5 +38,15 @@ class MainActivity : AppCompatActivity() {
         rvHeroes.layoutManager = LinearLayoutManager(this)
         val listHeroAdapter = ListHeroAdapter(list)
         rvHeroes.adapter = listHeroAdapter
+
+        listHeroAdapter.setOnItemClickCallback(object : ListHeroAdapter.OnItemClickCallback{
+            override fun onItemClicked(data: Hero) {
+                showSelectedHero(data)
+            }
+        })
+    }
+
+    private fun showSelectedHero(hero: Hero){
+        Toast.makeText(this,"U Choose This One " + hero.name,Toast.LENGTH_SHORT).show()
     }
 }
